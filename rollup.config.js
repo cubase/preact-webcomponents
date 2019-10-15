@@ -4,7 +4,11 @@ import commonjs from 'rollup-plugin-commonjs'
 import multiEntry from 'rollup-plugin-multi-entry'
 import serve from 'rollup-plugin-serve'
 import livereload from 'rollup-plugin-livereload'
+import json from 'rollup-plugin-json'
 import { terser } from 'rollup-plugin-terser'
+import builtins from 'rollup-plugin-node-builtins'
+import globals from 'rollup-plugin-node-globals'
+import alias from 'rollup-plugin-virtual-alias'
 import path from 'path'
 
 const isDev = process.env.NODE_ENV !== 'production'
@@ -17,12 +21,20 @@ export default {
   },
   plugins: [
     multiEntry({ exports: false }),
-    resolve(),
+    resolve({
+      browser: true
+    }),
     commonjs({
       include: 'node_modules/**'
     }),
+    json({
+      include: 'node_modules/**'
+    }),
+    globals(),
+    builtins(),
     babel({
-      exclude: 'node_modules/**'
+      exclude: 'node_modules/**',
+      runtimeHelpers: true
     }),
     !isDev && terser(),
     ...(isDev
