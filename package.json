@@ -1,0 +1,43 @@
+{
+  "name": "preact-webcomponents",
+  "version": "1.0.0",
+  "description": "Simple boilerplate for creating and bundling WebComponents libraries",
+  "main": "index.js",
+  "scripts": {
+    "dev": "rollup -wc",
+    "build": "env NODE_ENV=production rollup -c"
+  },
+  "author": "cubase@Jakub Konecny",
+  "license": "ISC",
+  "dependencies": {
+    "preact": "^10.0.0",
+    "preact-custom-element": "^3.0.0",
+    "react-jss": "^10.0.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.6.4",
+    "@babel/preset-env": "^7.6.3",
+    "babel-eslint": "^10.0.3",
+    "babel-preset-preact": "^2.0.0",
+    "eslint": "^6.5.1",
+    "eslint-config-prettier": "^6.4.0",
+    "eslint-config-standard": "^14.1.0",
+    "eslint-config-standard-preact": "^1.1.6",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-node": "^10.0.0",
+    "eslint-plugin-prettier": "^3.1.1",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-react": "^7.16.0",
+    "eslint-plugin-react-hooks": "^2.1.2",
+    "eslint-plugin-standard": "^4.0.1",
+    "prettier": "^1.18.2",
+    "rollup": "^1.23.1",
+    "rollup-plugin-babel": "^4.3.3",
+    "rollup-plugin-commonjs": "^10.1.0",
+    "rollup-plugin-livereload": "^1.0.4",
+    "rollup-plugin-multi-entry": "^2.1.0",
+    "rollup-plugin-node-resolve": "^5.2.0",
+    "rollup-plugin-serve": "^1.0.1",
+    "rollup-plugin-terser": "^5.1.2"
+  }
+}
