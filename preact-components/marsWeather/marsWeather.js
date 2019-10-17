@@ -1,103 +1,51 @@
 import { h } from 'preact'
-import axios from 'axios'
-import { useState, useEffect } from 'preact/hooks'
 
-import classes from './styles'
+import { useAxios } from '../../utils/hooks'
+import { marsStyles } from './styles'
+import SolCard from './solCard'
 
-const queryBuilder = (url, queryObject = {}) => {
-  const queries = Object.entries(queryObject).reduce((acc, [query, value]) => {
-    if (!value) return acc
-    acc.push(`${window.encodeURIComponent(query)}=${window.encodeURIComponent(value)}`)
-    return acc
-  }, [])
-
-  if (!queries.length) return url || '/'
-  return `${url}?${queries.join('&')}`
-}
-
-const useAxios = ({ url, query, ...requestOptions }, defaultValue = null, opts = []) => {
-  const [{ loading, error, data }, setResponse] = useState({
-    loading: false,
-    error: null,
-    data: defaultValue
-  })
-  const [fetch, setFetch] = useState({
-    url: url ? queryBuilder(url, query) : null,
-    requestOptions
-  })
-
-  const refetch = params => {
-    const { url, query, ...newOptions } = params || {}
-    if (!params) {
-      // Do simple refetch based on last request configuration
-      setFetch({
-        ...fetch
-      })
-    }
-    if (url) {
-      setFetch({
-        url: queryBuilder(url, query),
-        requestOptions: newOptions
-      })
-    }
-  }
-
-  useEffect(() => {
-    let canceled = false
-    async function makeRequest() {
-      setResponse(state => ({
-        ...state,
-        error: null,
-        loading: true
-      }))
-      try {
-        const result = await axios.request({
-          url: fetch.url,
-          method: 'get',
-          ...fetch.requestOptions
-        })
-        if (!canceled) {
-          const data =
-            typeof fetch.requestOptions.transformData === 'function'
-              ? await fetch.requestOptions.transformData(result.data)
-              : result.data
-          setResponse(state => ({
-            ...state,
-            loading: false,
-            error: null,
-            ...(fetch.requestOptions.skipResult ? null : { data })
-          }))
-        }
-      } catch (error) {
-        console.error('[useApi] ', error)
-        setResponse(state => ({
-          ...state,
-          loading: false,
-          error
-        }))
-      }
-    }
-
-    if (fetch.url) makeRequest()
-    return () => {
-      canceled = true
-    }
-  }, [fetch, ...opts])
-
-  return [{ loading, error, data }, refetch]
-}
-
-const MarsWeather = ({ apiKey = 'DEMO_KEY' }) => {
+const MarsWeather = ({ apikey = 'DEMO_KEY' }) => {
   const [{ loading, error, data }] = useAxios({
     url: 'https://api.nasa.gov/insight_weather/',
     query: {
-      api_key: apiKey,
+      api_key: apikey,
       feedtype: 'json',
       ver: '1.0'
+    },
+    transformData: data => {
+      const lastMeasuredSol = data.sol_keys[data.sol_keys.length - 1]
+      return {
+        sol: lastMeasuredSol,
+        solUTC: data[lastMeasuredSol].Last_UTC,
+        temperature: {
+          high: data[lastMeasuredSol].AT.mx,
+          low: data[lastMeasuredSol].AT.mn
+        }
+      }
     }
   })
-  console.log('Dejtaa', data)
-  return <div className={classes.wrapper}>Mars Component</div>
+  const { temperature = {}, sol, solUTC } = data || {}
+
+  return !loading && !error ? (
+    <div className={marsStyles.wrapper}>
+      <h1 className={marsStyles.header}>Elysium Planitia</h1>
+      <p className={marsStyles.info}>
+        <a href="https://api.nasa.gov/#insight_weather" target="_blank">
+          NASA InSight
+        </a>{' '}
+        is taking daily weather measurements (temperature, wind, pressure) on the surface of Mars at
+        Elysium Planitia.
+      </p>
+      <SolCard
+        sol={sol}
+        solUTC={solUTC}
+        style={{
+          marginTop: '3rem'
+        }}
+        temperature={temperature}
+      />
+    </div>
+  ) : null
 }
 
 export default MarsWeather
