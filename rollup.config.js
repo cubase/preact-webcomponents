@@ -8,7 +8,7 @@ import json from 'rollup-plugin-json'
 import { terser } from 'rollup-plugin-terser'
 import builtins from 'rollup-plugin-node-builtins'
 import globals from 'rollup-plugin-node-globals'
-import alias from 'rollup-plugin-virtual-alias'
+import url from 'rollup-plugin-url'
 import path from 'path'
 
 const isDev = process.env.NODE_ENV !== 'production'
@@ -21,6 +21,12 @@ export default {
   },
   plugins: [
     multiEntry({ exports: false }),
+    url({
+      limit: 10 * 1024,
+      publicPath: '/assets/',
+      fileName: '[name][extname]',
+      destDir: path.join(__dirname, 'dist/assets')
+    }),
     resolve({
       browser: true
     }),

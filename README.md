@@ -2,7 +2,7 @@
 ## Simple boilerplate from creating and bundling WebComponents libraries
 
 #### Boilerplate includes:
-*Preact X, Rollup.js, ESLint, Prettier, React-JSS*
+*Preact X, Rollup.js, ESLint, Prettier, Emotion (CSS-in-JS)*
 
 #### Dev
 Rollup plugin serves static files in root of workspace and provides live reload on file changes.
