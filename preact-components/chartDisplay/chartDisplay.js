@@ -26,7 +26,9 @@ const ChartDisplay = ({ name, width, height, apikey = 'DEMO_KEY' }) => {
 
   useEffect(() => {
     const drawData = data => {
-      RadarChart.draw(`#${name}-chart`, data, chartOptions, d3)
+      d3.json('./preact-components/chartDisplay/data.json', function(data) {
+        RadarChart.draw(`#${name}-chart`, data, chartOptions, d3)
+      })
     }
 
     drawData(data)
