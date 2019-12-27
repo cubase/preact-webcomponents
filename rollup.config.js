@@ -1,5 +1,5 @@
 import resolve from 'rollup-plugin-node-resolve'
-import babel from 'rollup-plugin-babel'
+import typescript from 'rollup-plugin-typescript'
 import commonjs from 'rollup-plugin-commonjs'
 import multiEntry from 'rollup-plugin-multi-entry'
 import serve from 'rollup-plugin-serve'
@@ -14,7 +14,7 @@ import path from 'path'
 const isDev = process.env.NODE_ENV !== 'production'
 
 export default {
-  input: 'web-components.js',
+  input: './src/web-components.ts',
   output: {
     file: isDev ? 'dist/bundle.js' : 'dist/bundle.min.js',
     format: 'iife'
@@ -38,10 +38,7 @@ export default {
     }),
     globals(),
     builtins(),
-    babel({
-      exclude: 'node_modules/**',
-      runtimeHelpers: true
-    }),
+    typescript(),
     !isDev && terser(),
     ...(isDev
       ? [

@@ -1,5 +1,5 @@
 import { css } from 'emotion'
-import marsJpg from '../../assets/mars.jpg'
+import marsBackground from '../../../assets/mars.jpg'
 
 const marsWrapper = css`
   position: absolute;
@@ -7,7 +7,7 @@ const marsWrapper = css`
   right: 0;
   height: 100vh;
   background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.9)),
-    url('${marsJpg}');
+url('${marsBackground}');
   background-size: cover;
   background-position: 30%;
   font-family: 'sans-serif';
